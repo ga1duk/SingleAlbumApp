@@ -2,19 +2,22 @@ package com.company.singlealbumapp.ui
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.company.singlealbumapp.adapter.OnInteractionListener
 import com.company.singlealbumapp.adapter.TrackAdapter
 import com.company.singlealbumapp.api.MediaApiService
 import com.company.singlealbumapp.databinding.ActivityMainBinding
 import com.company.singlealbumapp.dto.Track
+import com.company.singlealbumapp.viewmodel.MediaViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MediaViewModel by viewModels()
 
     @Inject
     lateinit var apiService: MediaApiService
@@ -34,22 +37,17 @@ class MainActivity : AppCompatActivity() {
 
         val tracks = mutableListOf<Track>()
 
-        lifecycleScope.launch {
-            try {
-                val body = apiService.getAlbum()
-                with(binding) {
-                    tvAlbumName.text = body.title
-                    tvAuthorName.text = body.artist
-                    tvAlbumYear.text = body.published
-                    tvAlbumGenre.text = body.genre
-                }
-                for (track in body.tracks) {
-                    tracks.add(Track(track.id, track.file))
-                }
-                adapter.submitList(tracks)
-            } catch (e: Exception) {
-                e.printStackTrace()
+        viewModel.data.observe(this, Observer { album ->
+            with(binding) {
+                tvAlbumName.text = album.title
+                tvAuthorName.text = album.artist
+                tvAlbumYear.text = album.published
+                tvAlbumGenre.text = album.genre
             }
-        }
+            for (track in album.tracks) {
+                tracks.add(Track(track.id, track.file))
+            }
+            adapter.submitList(tracks)
+        })
     }
 }
