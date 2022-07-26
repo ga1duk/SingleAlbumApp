@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.company.singlealbumapp.adapter.OnInteractionListener
 import com.company.singlealbumapp.adapter.TrackAdapter
 import com.company.singlealbumapp.api.MediaApiService
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         val tracks = mutableListOf<Track>()
 
-        viewModel.data.observe(this, Observer { album ->
+        viewModel.data.observe(this) { album ->
             with(binding) {
                 tvAlbumName.text = album.title
                 tvAuthorName.text = album.artist
@@ -48,6 +47,6 @@ class MainActivity : AppCompatActivity() {
                 tracks.add(Track(track.id, track.file))
             }
             adapter.submitList(tracks)
-        })
+        }
     }
 }
