@@ -18,7 +18,7 @@ class MediaViewModel @Inject constructor(private val repository: MediaRepository
         loadAlbum()
     }
 
-    fun loadAlbum() {
+    private fun loadAlbum() {
         viewModelScope.launch {
             try {
                 data.value = repository.getAlbum()

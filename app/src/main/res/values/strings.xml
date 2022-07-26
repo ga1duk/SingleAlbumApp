@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SingleAlbumApp</string>
+    <string name="album_title_text">ALBUM</string>
+    <string name="author_title_text">Author:</string>
 </resources>
