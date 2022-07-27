@@ -73,12 +73,13 @@
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/tv_album_year"
         app:layout_constraintTop_toBottomOf="@id/tv_author_title"
-        tools:text="One More Light Live" />
+        tools:text="One More Light Live"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tracks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/big_spacing"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_album_genre"
