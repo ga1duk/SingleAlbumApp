@@ -1,6 +1,7 @@
 package com.company.singlealbumapp.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +10,8 @@ import com.company.singlealbumapp.databinding.CardTrackBinding
 import com.company.singlealbumapp.dto.Track
 
 interface OnInteractionListener {
-    fun onClick(track: Track) {}
+    fun onPlayClick(track: Track) {}
+    fun onPauseClick(track: Track) {}
 }
 
 class TrackAdapter(private val listener: OnInteractionListener) :
@@ -33,9 +35,18 @@ class TrackViewHolder(
     RecyclerView.ViewHolder(binding.root) {
     fun bind(track: Track) {
         with(binding) {
+            btnPause.visibility = View.INVISIBLE
+            btnPlay.visibility = View.VISIBLE
             tvTrackName.text = track.file
             btnPlay.setOnClickListener {
-                listener.onClick(track)
+                listener.onPlayClick(track)
+                btnPlay.visibility = View.INVISIBLE
+                btnPause.visibility = View.VISIBLE
+            }
+            btnPause.setOnClickListener {
+                listener.onPauseClick(track)
+                btnPlay.visibility = View.VISIBLE
+                btnPause.visibility = View.INVISIBLE
             }
         }
     }

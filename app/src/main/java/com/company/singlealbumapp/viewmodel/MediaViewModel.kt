@@ -22,7 +22,6 @@ class MediaViewModel @Inject constructor(private val repository: MediaRepository
         viewModelScope.launch {
             try {
                 data.value = repository.getAlbum()
-                println(data.value)
             } catch (e: Exception) {
 
             }

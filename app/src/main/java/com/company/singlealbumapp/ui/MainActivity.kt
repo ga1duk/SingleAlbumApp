@@ -1,9 +1,11 @@
 package com.company.singlealbumapp.ui
 
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.company.singlealbumapp.BuildConfig.BASE_URL
 import com.company.singlealbumapp.adapter.OnInteractionListener
 import com.company.singlealbumapp.adapter.TrackAdapter
 import com.company.singlealbumapp.api.MediaApiService
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MediaViewModel by viewModels()
+    private val mediaObserver = MediaLifecycleObserver()
 
     @Inject
     lateinit var apiService: MediaApiService
@@ -26,11 +29,35 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var player = MediaPlayer()
+        var isButtonPlayFirstClick = true
+        var currentTrack = 0L
+
         val adapter = TrackAdapter(object : OnInteractionListener {
-            override fun onClick(track: Track) {
-                Toast.makeText(this@MainActivity, track.file, Toast.LENGTH_LONG).show()
+            override fun onPlayClick(track: Track) {
+                if (isButtonPlayFirstClick || currentTrack != track.id) {
+                    player.stop()
+                    isButtonPlayFirstClick = false
+                    player = MediaPlayer.create(
+                        this@MainActivity,
+                        Uri.parse("$BASE_URL${track.file}")
+                    )
+                    currentTrack = track.id
+                }
+
+                    player.setOnCompletionListener {
+                        it.release()
+                    }
+                    player.start()
+                    println(player.duration / 1000)
+                }
+
+            override fun onPauseClick(track: Track) {
+                player.pause()
             }
         })
+
+        lifecycle.addObserver(mediaObserver)
 
         binding.rvTracks.adapter = adapter
 
