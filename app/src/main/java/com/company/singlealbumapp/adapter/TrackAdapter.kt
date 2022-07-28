@@ -35,18 +35,16 @@ class TrackViewHolder(
     RecyclerView.ViewHolder(binding.root) {
     fun bind(track: Track) {
         with(binding) {
-            btnPause.visibility = View.INVISIBLE
-            btnPlay.visibility = View.VISIBLE
             tvTrackName.text = track.file
+
+            btnPlay.visibility = if (!track.isPlaying) View.VISIBLE else View.INVISIBLE
+            btnPause.visibility = if (track.isPlaying) View.VISIBLE else View.INVISIBLE
+
             btnPlay.setOnClickListener {
                 listener.onPlayClick(track)
-                btnPlay.visibility = View.INVISIBLE
-                btnPause.visibility = View.VISIBLE
             }
             btnPause.setOnClickListener {
                 listener.onPauseClick(track)
-                btnPlay.visibility = View.VISIBLE
-                btnPause.visibility = View.INVISIBLE
             }
         }
     }

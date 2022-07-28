@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.company.singlealbumapp.customview.PlayButton
-        android:id="@+id/btn_play"
+    <com.company.singlealbumapp.customview.PauseButton
+        android:id="@+id/btn_pause"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="@dimen/common_spacing"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.company.singlealbumapp.customview.PauseButton
-        android:id="@+id/btn_pause"
+    <com.company.singlealbumapp.customview.PlayButton
+        android:id="@+id/btn_play"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="@dimen/common_spacing"

@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity() {
 
         var player = MediaPlayer()
         var isButtonPlayFirstClick = true
-        var currentTrack = 0L
+        var currentTrack = 0
+
+        val tracks = mutableListOf<Track>()
 
         val adapter = TrackAdapter(object : OnInteractionListener {
             override fun onPlayClick(track: Track) {
@@ -45,15 +47,28 @@ class MainActivity : AppCompatActivity() {
                     currentTrack = track.id
                 }
 
-                    player.setOnCompletionListener {
-                        it.release()
+                player.start()
+
+                viewModel.playTrack(track)
+
+                player.setOnCompletionListener {
+                    player.stop()
+                    viewModel.pauseTrack(track)
+                    if (track.id == 16) {
+                        binding.rvTracks.smoothScrollToPosition(0)
+                        onPlayClick(Track(1, track.file))
+                    } else {
+                        onPlayClick(Track(track.id + 1, track.file))
                     }
-                    player.start()
-                    println(player.duration / 1000)
+                    it.release()
                 }
+            }
 
             override fun onPauseClick(track: Track) {
-                player.pause()
+                if (currentTrack == track.id) {
+                    player.pause()
+                }
+                viewModel.pauseTrack(track)
             }
         })
 
@@ -61,9 +76,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.rvTracks.adapter = adapter
 
-        val tracks = mutableListOf<Track>()
-
-        viewModel.data.observe(this) { album ->
+        viewModel.albumData.observe(this) { album ->
             with(binding) {
                 tvAlbumName.text = album.title
                 tvAuthorName.text = album.artist
@@ -71,9 +84,21 @@ class MainActivity : AppCompatActivity() {
                 tvAlbumGenre.text = album.genre
             }
             for (track in album.tracks) {
-                tracks.add(Track(track.id, track.file))
+                tracks.add(Track(track.id, track.file, track.isPlaying))
             }
             adapter.submitList(tracks)
+        }
+
+        viewModel.trackData.observe(this) {
+            for (track in tracks) {
+                if (it.id == track.id) {
+                    track.isPlaying = it.isPlaying
+                } else {
+                    track.isPlaying = false
+                }
+            }
+            adapter.submitList(tracks)
+            adapter.notifyDataSetChanged()
         }
     }
 }
