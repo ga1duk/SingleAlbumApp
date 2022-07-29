@@ -6,21 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.company.singlealbumapp.BuildConfig.BASE_URL
 import com.company.singlealbumapp.adapter.OnInteractionListener
 import com.company.singlealbumapp.adapter.TrackAdapter
-import com.company.singlealbumapp.api.MediaApiService
 import com.company.singlealbumapp.databinding.ActivityMainBinding
 import com.company.singlealbumapp.dto.Track
 import com.company.singlealbumapp.viewmodel.MediaViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MediaViewModel by viewModels()
     private val mediaObserver = MediaLifecycleObserver()
-
-    @Inject
-    lateinit var apiService: MediaApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,40 +29,38 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = TrackAdapter(object : OnInteractionListener {
             override fun onPlayClick(track: Track) {
-                viewModel.playTrack(track)
                 if (isButtonPlayFirstClick || currentTrack != track.id) {
-                    mediaObserver.player?.reset()
+                    mediaObserver.reset()
                     mediaObserver.apply {
                         player?.setDataSource("$BASE_URL${track.file}")
                     }
-                    mediaObserver.player?.prepareAsync()
-                    mediaObserver.player.apply {
-                        this?.setOnPreparedListener {
-                            start()
-                        }
-                    }
+                    mediaObserver.play()
                     isButtonPlayFirstClick = false
                 } else {
-                    mediaObserver.player?.start()
+                    mediaObserver.resume()
                 }
 
                 currentTrack = track.id
 
+                viewModel.playTrack(track)
+
                 mediaObserver.player?.setOnCompletionListener {
-                    viewModel.pauseTrack(track)
-                    if (track.id == 16) {
+                    mediaObserver.stop()
+//                    mediaObserver.release()
+                    if (track.id == tracks.size) {
                         binding.rvTracks.smoothScrollToPosition(0)
-                        onPlayClick(Track(track.id - 15, track.file))
+                        onPlayClick(Track(tracks[0].id, tracks[0].file))
                     } else {
-                        onPlayClick(Track(track.id + 1, track.file))
+                        onPlayClick(Track(track.id + 1, tracks[track.id].file))
                     }
-                    it.release()
                 }
             }
 
             override fun onPauseClick(track: Track) {
-                viewModel.pauseTrack(track)
-                mediaObserver.player?.pause()
+                if (mediaObserver.player?.isPlaying == true) {
+                    mediaObserver.pause()
+                    viewModel.pauseTrack(track)
+                }
             }
         })
 
@@ -89,8 +82,7 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(tracks)
         }
 
-        viewModel.trackData.observe(this)
-        {
+        viewModel.trackData.observe(this) {
             for (track in tracks) {
                 if (it.id == track.id) {
                     track.isPlaying = it.isPlaying
