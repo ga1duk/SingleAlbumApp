@@ -1,7 +1,5 @@
 package com.company.singlealbumapp.ui
 
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var player = MediaPlayer()
         var isButtonPlayFirstClick = true
         var currentTrack = 0
 
@@ -37,26 +34,30 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = TrackAdapter(object : OnInteractionListener {
             override fun onPlayClick(track: Track) {
+                viewModel.playTrack(track)
                 if (isButtonPlayFirstClick || currentTrack != track.id) {
-                    player.stop()
+                    mediaObserver.player?.reset()
+                    mediaObserver.apply {
+                        player?.setDataSource("$BASE_URL${track.file}")
+                    }
+                    mediaObserver.player?.prepareAsync()
+                    mediaObserver.player.apply {
+                        this?.setOnPreparedListener {
+                            start()
+                        }
+                    }
                     isButtonPlayFirstClick = false
-                    player = MediaPlayer.create(
-                        this@MainActivity,
-                        Uri.parse("$BASE_URL${track.file}")
-                    )
-                    currentTrack = track.id
+                } else {
+                    mediaObserver.player?.start()
                 }
 
-                player.start()
+                currentTrack = track.id
 
-                viewModel.playTrack(track)
-
-                player.setOnCompletionListener {
-                    player.stop()
+                mediaObserver.player?.setOnCompletionListener {
                     viewModel.pauseTrack(track)
                     if (track.id == 16) {
                         binding.rvTracks.smoothScrollToPosition(0)
-                        onPlayClick(Track(1, track.file))
+                        onPlayClick(Track(track.id - 15, track.file))
                     } else {
                         onPlayClick(Track(track.id + 1, track.file))
                     }
@@ -65,10 +66,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPauseClick(track: Track) {
-                if (currentTrack == track.id) {
-                    player.pause()
-                }
                 viewModel.pauseTrack(track)
+                mediaObserver.player?.pause()
             }
         })
 
@@ -76,7 +75,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.rvTracks.adapter = adapter
 
-        viewModel.albumData.observe(this) { album ->
+        viewModel.albumData.observe(this)
+        { album ->
             with(binding) {
                 tvAlbumName.text = album.title
                 tvAuthorName.text = album.artist
@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(tracks)
         }
 
-        viewModel.trackData.observe(this) {
+        viewModel.trackData.observe(this)
+        {
             for (track in tracks) {
                 if (it.id == track.id) {
                     track.isPlaying = it.isPlaying
