@@ -1,7 +1,8 @@
 package com.company.singlealbumapp.ui
 
 import android.os.Bundle
-import android.view.View
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +15,7 @@ import com.company.singlealbumapp.viewmodel.MediaViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -33,27 +34,29 @@ class MainActivity : AppCompatActivity() {
 
         val tracks = mutableListOf<Track>()
 
+        binding.seekBar.progress = 0
+
         val adapter = TrackAdapter(object : OnInteractionListener {
             override fun onPlayClick(track: Track) {
-                    if (isButtonPlayFirstClick || currentTrack != track.id) {
-                        mediaObserver.reset()
-                        mediaObserver.apply {
-                            player?.setDataSource("$BASE_URL${track.file}")
-                        }
-                        mediaObserver.play()
-
-                        isButtonPlayFirstClick = false
-                    } else {
-                        mediaObserver.resume()
+                if (isButtonPlayFirstClick || currentTrack != track.id) {
+                    mediaObserver.reset()
+                    mediaObserver.apply {
+                        player?.setDataSource("$BASE_URL${track.file}")
                     }
+                    mediaObserver.play()
 
-                    currentTrack = track.id
+                    isButtonPlayFirstClick = false
+                } else {
+                    mediaObserver.resume()
+                }
 
-                    viewModel.playTrack(track)
+                currentTrack = track.id
 
-                    binding.progressBar.progress = 0
-                    binding.progressBar.max.let {
-                        mediaObserver.player?.duration
+                viewModel.playTrack(track)
+
+                binding.seekBar.max.let {
+                    mediaObserver.player?.duration
+                }
 
                     val totalSecs = mediaObserver.player?.duration?.div(1000)
                     val minutes = (totalSecs?.rem(3600))?.div(60)
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                             var currentPosition = 0
                             val total =
                                 mediaObserver.player?.duration
-                            binding.progressBar.max = total ?: 0
+                            binding.seekBar.max = total ?: 0
                             while (mediaObserver.player != null && currentPosition < (total ?: 0)) {
                                 delay(1000)
 
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
                                 currentPosition = mediaObserver.player?.currentPosition ?: 0
 
-                                binding.progressBar.progress = currentPosition
+                                binding.seekBar.progress = currentPosition
                             }
                         } catch (e: InterruptedException) {
                             return@launch
@@ -85,7 +88,6 @@ class MainActivity : AppCompatActivity() {
                             return@launch
                         }
                     }
-                }
 
                 mediaObserver.player?.setOnCompletionListener {
                     mediaObserver.stop()
@@ -102,6 +104,20 @@ class MainActivity : AppCompatActivity() {
                 if (mediaObserver.player?.isPlaying == true) {
                     mediaObserver.pause()
                     viewModel.pauseTrack(track)
+                }
+            }
+        })
+
+        binding.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onProgressChanged(
+                seekBar: SeekBar,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                if (fromUser) {
+                    mediaObserver.player?.seekTo(progress)
                 }
             }
         })
