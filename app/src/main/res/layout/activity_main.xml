@@ -45,8 +45,8 @@
         android:id="@+id/tv_author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/extra_small_spacing"
         android:layout_marginStart="@dimen/extra_small_spacing"
+        android:paddingBottom="@dimen/extra_small_spacing"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/tv_author_title"
@@ -68,12 +68,12 @@
         android:id="@+id/tv_album_genre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/big_spacing"
         android:layout_marginStart="@dimen/big_spacing"
+        android:layout_marginBottom="@dimen/big_spacing"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/tv_album_year"
         app:layout_constraintTop_toBottomOf="@id/tv_author_title"
-        tools:text="One More Light Live"/>
+        tools:text="One More Light Live" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tracks"
@@ -81,8 +81,39 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/big_spacing"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progressBar"
         app:layout_constraintTop_toBottomOf="@id/tv_album_genre"
         tools:listitem="@layout/card_track" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingStart="@dimen/small_spacing"
+        android:paddingEnd="@dimen/small_spacing"
+        android:scaleY="2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/tv_track_duration"
+        app:layout_constraintEnd_toStartOf="@id/tv_track_progress"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_track_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_spacing"
+        android:text="00:00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_track_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/small_spacing"
+        android:text="00:00"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
