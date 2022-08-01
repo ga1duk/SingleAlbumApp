@@ -86,14 +86,13 @@
         tools:listitem="@layout/card_track" />
 
     <androidx.appcompat.widget.AppCompatSeekBar
+        style="@style/tallerBarStyle"
         android:id="@+id/seek_bar"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:paddingStart="@dimen/small_spacing"
         android:paddingEnd="@dimen/small_spacing"
-        android:scaleY="2"
         app:layout_constraintBottom_toTopOf="@id/tv_track_duration"
-        app:layout_constraintEnd_toStartOf="@id/tv_track_progress"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
