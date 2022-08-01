@@ -14,6 +14,7 @@ import com.company.singlealbumapp.viewmodel.MediaViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -34,28 +35,25 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = TrackAdapter(object : OnInteractionListener {
             override fun onPlayClick(track: Track) {
-                if (isButtonPlayFirstClick || currentTrack != track.id) {
-                    mediaObserver.reset()
-                    mediaObserver.apply {
-                        player?.setDataSource("$BASE_URL${track.file}")
+                    if (isButtonPlayFirstClick || currentTrack != track.id) {
+                        mediaObserver.reset()
+                        mediaObserver.apply {
+                            player?.setDataSource("$BASE_URL${track.file}")
+                        }
+                        mediaObserver.play()
+
+                        isButtonPlayFirstClick = false
+                    } else {
+                        mediaObserver.resume()
                     }
-                    mediaObserver.play()
 
-                    isButtonPlayFirstClick = false
-                } else {
-                    mediaObserver.resume()
-                }
+                    currentTrack = track.id
 
-                currentTrack = track.id
+                    viewModel.playTrack(track)
 
-                viewModel.playTrack(track)
-
-                if (mediaObserver.player?.isPlaying == true) {
-                    binding.progressBar.visibility = View.VISIBLE
                     binding.progressBar.progress = 0
                     binding.progressBar.max.let {
                         mediaObserver.player?.duration
-                    }
 
                     val totalSecs = mediaObserver.player?.duration?.div(1000)
                     val minutes = (totalSecs?.rem(3600))?.div(60)
@@ -63,12 +61,12 @@ class MainActivity : AppCompatActivity() {
                     binding.tvTrackDuration.text = String.format("%02d:%02d", minutes, seconds)
 
                     lifecycleScope.launch {
-                        var currentPosition = 0
-                        val total =
-                            mediaObserver.player?.duration
-                        binding.progressBar.max = total ?: 0
-                        while (mediaObserver.player != null && currentPosition < (total ?: 0)) {
-                            try {
+                        try {
+                            var currentPosition = 0
+                            val total =
+                                mediaObserver.player?.duration
+                            binding.progressBar.max = total ?: 0
+                            while (mediaObserver.player != null && currentPosition < (total ?: 0)) {
                                 delay(1000)
 
                                 val totalSecs = mediaObserver.player?.currentPosition?.div(1000)
@@ -78,12 +76,13 @@ class MainActivity : AppCompatActivity() {
                                     String.format("%02d:%02d", minutes, seconds)
 
                                 currentPosition = mediaObserver.player?.currentPosition ?: 0
-                            } catch (e: InterruptedException) {
-                                return@launch
-                            } catch (e: Exception) {
-                                return@launch
+
+                                binding.progressBar.progress = currentPosition
                             }
-                            binding.progressBar.progress = currentPosition
+                        } catch (e: InterruptedException) {
+                            return@launch
+                        } catch (e: Exception) {
+                            return@launch
                         }
                     }
                 }

@@ -9,7 +9,7 @@ class MediaLifecycleObserver : LifecycleEventObserver {
     var player: MediaPlayer? = MediaPlayer()
 
     fun play() {
-        player?.prepareAsync()
+        player?.prepare()
         player?.setOnPreparedListener {
             it.start()
         }

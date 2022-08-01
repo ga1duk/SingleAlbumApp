@@ -93,7 +93,6 @@
         android:paddingStart="@dimen/small_spacing"
         android:paddingEnd="@dimen/small_spacing"
         android:scaleY="2"
-        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/tv_track_duration"
         app:layout_constraintEnd_toStartOf="@id/tv_track_progress"
         app:layout_constraintStart_toStartOf="parent" />
