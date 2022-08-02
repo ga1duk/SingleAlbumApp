@@ -21,8 +21,9 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MediaViewModel by viewModels()
-    private val mediaObserver = MediaLifecycleObserver()
+
     private lateinit var binding: ActivityMainBinding
+    private val mediaObserver = MediaLifecycleObserver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,36 +59,29 @@ class MainActivity : AppCompatActivity() {
                     mediaObserver.player?.duration
                 }
 
-                    val totalSecs = mediaObserver.player?.duration?.div(1000)
-                    val minutes = (totalSecs?.rem(3600))?.div(60)
-                    val seconds = totalSecs?.rem(60)
-                    binding.tvTrackDuration.text = String.format("%02d:%02d", minutes, seconds)
+                convertAndSetTrackDuration(binding)
 
-                    lifecycleScope.launch {
-                        try {
-                            var currentPosition = 0
-                            val total =
-                                mediaObserver.player?.duration
-                            binding.seekBar.max = total ?: 0
-                            while (mediaObserver.player != null && currentPosition < (total ?: 0)) {
-                                delay(1000)
+                lifecycleScope.launch {
+                    try {
+                        var currentPosition = 0
+                        val total =
+                            mediaObserver.player?.duration
+                        binding.seekBar.max = total ?: 0
+                        while (mediaObserver.player != null && currentPosition < (total ?: 0)) {
+                            delay(1000)
 
-                                val totalSecs = mediaObserver.player?.currentPosition?.div(1000)
-                                val minutes = (totalSecs?.rem(3600))?.div(60)
-                                val seconds = totalSecs?.rem(60)
-                                binding.tvTrackProgress.text =
-                                    String.format("%02d:%02d", minutes, seconds)
+                            convertAndSetTrackCurrentPosition(binding)
 
-                                currentPosition = mediaObserver.player?.currentPosition ?: 0
+                            currentPosition = mediaObserver.player?.currentPosition ?: 0
 
-                                binding.seekBar.progress = currentPosition
-                            }
-                        } catch (e: InterruptedException) {
-                            return@launch
-                        } catch (e: Exception) {
-                            return@launch
+                            binding.seekBar.progress = currentPosition
                         }
+                    } catch (e: InterruptedException) {
+                        return@launch
+                    } catch (e: Exception) {
+                        return@launch
                     }
+                }
 
                 mediaObserver.player?.setOnCompletionListener {
                     mediaObserver.stop()
@@ -151,5 +145,19 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(tracks)
             adapter.notifyDataSetChanged()
         }
+    }
+
+    private fun convertAndSetTrackDuration(binding: ActivityMainBinding) {
+        val totalDuration = mediaObserver.player?.duration?.div(1000)
+        val durationInMins = (totalDuration?.rem(3600))?.div(60)
+        val durationInSecs = totalDuration?.rem(60)
+        binding.tvTrackDuration.text = String.format("%02d:%02d", durationInMins, durationInSecs)
+    }
+
+    private fun convertAndSetTrackCurrentPosition(binding: ActivityMainBinding) {
+        val currentPosition = mediaObserver.player?.currentPosition?.div(1000)
+        val positionInMins = (currentPosition?.rem(3600))?.div(60)
+        val positionInSecs = currentPosition?.rem(60)
+        binding.tvTrackProgress.text = String.format("%02d:%02d", positionInMins, positionInSecs)
     }
 }
