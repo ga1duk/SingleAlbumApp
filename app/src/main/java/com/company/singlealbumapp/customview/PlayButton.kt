@@ -7,17 +7,22 @@ import android.graphics.Path
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.widget.AppCompatButton
 import com.company.singlealbumapp.R
 import kotlin.math.min
 
 
+private const val CUSTOM_STROKE_WIDTH = 2F
+private const val Y_AXIS_OFFSET = 18
+private const val X_AXIS_OFFSET = 10
+private const val X_AXIS_OFFSET_ENLARGED = 20
+
 class PlayButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
-) : View(
-    context, attrs, defStyleAttr, defStyleRes
+    defStyleAttr: Int = 0
+) : AppCompatButton(
+    context, attrs, defStyleAttr
 ) {
 
     private var radius: Float = 0F
@@ -29,7 +34,7 @@ class PlayButton @JvmOverloads constructor(
     }
 
     private val trianglePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = 2F
+        strokeWidth = CUSTOM_STROKE_WIDTH
         color = resources.getColor(R.color.black)
         style = Paint.Style.FILL_AND_STROKE
     }
@@ -45,10 +50,10 @@ class PlayButton @JvmOverloads constructor(
         canvas.drawCircle(center.x, center.y, radius, circlePaint)
 
         path.fillType = Path.FillType.EVEN_ODD
-        path.moveTo(center.x - 10, center.y + 18)
-        path.lineTo(center.x - 10, center.y - 18)
-        path.lineTo(center.x + 20, center.y)
-        path.lineTo(center.x - 10, center.y + 18)
+        path.moveTo(center.x - X_AXIS_OFFSET, center.y + Y_AXIS_OFFSET)
+        path.lineTo(center.x - X_AXIS_OFFSET, center.y - Y_AXIS_OFFSET)
+        path.lineTo(center.x + X_AXIS_OFFSET_ENLARGED, center.y)
+        path.lineTo(center.x - X_AXIS_OFFSET, center.y + Y_AXIS_OFFSET)
         path.close()
 
         canvas.drawPath(path, trianglePaint)

@@ -5,18 +5,21 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
-import android.view.View
+import androidx.appcompat.widget.AppCompatButton
 import com.company.singlealbumapp.R
 import kotlin.math.min
 
 
+private const val CUSTOM_STROKE_WIDTH = 10F
+private const val Y_AXIS_OFFSET = 15
+private const val X_AXIS_OFFSET = 8
+
 class PauseButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
-) : View(
-    context, attrs, defStyleAttr, defStyleRes
+    defStyleAttr: Int = 0
+) : AppCompatButton(
+    context, attrs, defStyleAttr
 ) {
 
     private var radius: Float = 0F
@@ -29,7 +32,7 @@ class PauseButton @JvmOverloads constructor(
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        strokeWidth = 10F
+        strokeWidth = CUSTOM_STROKE_WIDTH
         color = resources.getColor(R.color.black)
     }
 
@@ -40,7 +43,19 @@ class PauseButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawCircle(center.x, center.y, radius, circlePaint)
-        canvas.drawLine(center.x + 8, center.y - 15, center.x + 8, center.y + 15, linePaint)
-        canvas.drawLine(center.x - 8, center.y - 15, center.x - 8, center.y + 15, linePaint)
+        canvas.drawLine(
+            center.x + X_AXIS_OFFSET,
+            center.y - Y_AXIS_OFFSET,
+            center.x + X_AXIS_OFFSET,
+            center.y + Y_AXIS_OFFSET,
+            linePaint
+        )
+        canvas.drawLine(
+            center.x - X_AXIS_OFFSET,
+            center.y - Y_AXIS_OFFSET,
+            center.x - X_AXIS_OFFSET,
+            center.y + Y_AXIS_OFFSET,
+            linePaint
+        )
     }
 }
