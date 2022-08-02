@@ -1,27 +1,36 @@
 package com.company.singlealbumapp.repository
 
-import com.company.singlealbumapp.api.MediaApiService
+import com.company.singlealbumapp.BuildConfig.BASE_URL
 import com.company.singlealbumapp.dto.Album
-import com.company.singlealbumapp.error.ApiError
-import com.company.singlealbumapp.error.NetworkError
-import com.company.singlealbumapp.error.UnknownError
-import java.io.IOException
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import javax.inject.Inject
 
-class MediaRepositoryImpl @Inject constructor(val apiService: MediaApiService) : MediaRepository {
+class MediaRepositoryImpl @Inject constructor(private val client: OkHttpClient) : MediaRepository {
+
+    private val gson = Gson()
+
+    private val typeToken = object : TypeToken<Album>() {}
 
     override suspend fun getAlbum(): Album {
-        try {
-            val response = apiService.getAlbum()
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+        lateinit var album: Album
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val request: Request = Request.Builder()
+                    .url("$BASE_URL/album.json")
+                    .build()
+                album = client.newCall(request)
+                    .execute()
+                    .let { it.body?.string() ?: throw RuntimeException("body is null") }
+                    .let {
+                        gson.fromJson(it, typeToken.type)
+                    }
             }
-
-            return response.body() ?: throw ApiError(response.code(), response.message())
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
         }
+        return album
     }
 }
