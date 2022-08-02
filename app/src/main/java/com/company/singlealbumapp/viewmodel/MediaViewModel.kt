@@ -32,7 +32,7 @@ class MediaViewModel @Inject constructor(private val repository: MediaRepository
         }
     }
 
-    fun playTrack(track: Track)  {
+    fun playTrack(track: Track) {
         trackData.value = Track(track.id, track.file, isPlaying = true)
     }
 

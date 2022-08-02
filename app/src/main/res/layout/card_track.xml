@@ -27,15 +27,15 @@
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/small_spacing"
         android:paddingEnd="@dimen/small_spacing"
-        android:textSize="20sp"
         android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/btn_play"
         app:layout_constraintStart_toEndOf="@id/btn_play"
         app:layout_constraintTop_toTopOf="@id/btn_play"
         tools:text="Talking To Myself" />
 
     <TextView
-        android:id="@+id/tv_album_name"
+        android:id="@+id/tv_album_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/extra_small_spacing"
@@ -44,16 +44,5 @@
         app:layout_constraintStart_toEndOf="@id/tv_track_name"
         app:layout_constraintTop_toTopOf="@id/btn_play"
         tools:text="One More Light Live" />
-
-    <TextView
-        android:id="@+id/tv_track_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/extra_small_spacing"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/btn_play"
-        app:layout_constraintStart_toEndOf="@id/tv_album_name"
-        app:layout_constraintTop_toTopOf="@id/btn_play"
-        tools:text="4:17" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

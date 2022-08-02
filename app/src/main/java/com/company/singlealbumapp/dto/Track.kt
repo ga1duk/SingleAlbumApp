@@ -4,5 +4,5 @@ data class Track(
     val id: Int,
     val file: String,
     var isPlaying: Boolean = false,
-    var albumName: String? = null
+    var albumTitle: String? = null
 )

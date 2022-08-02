@@ -87,8 +87,8 @@
         tools:listitem="@layout/card_track" />
 
     <androidx.appcompat.widget.AppCompatSeekBar
-        style="@style/tallerBarStyle"
         android:id="@+id/seek_bar"
+        style="@style/tallerBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/small_spacing"
@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/small_spacing"
         android:text="00:00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@ class TrackViewHolder(
         with(binding) {
             tvTrackName.text = track.file
 
-            tvAlbumName.text = track.albumName
+            tvAlbumTitle.text = track.albumTitle
 
             btnPlay.visibility = if (!track.isPlaying) View.VISIBLE else View.INVISIBLE
             btnPause.visibility = if (track.isPlaying) View.VISIBLE else View.INVISIBLE

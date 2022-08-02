@@ -1,7 +1,6 @@
 package com.company.singlealbumapp.ui
 
 import android.os.Bundle
-import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.viewModels
@@ -16,6 +15,7 @@ import com.company.singlealbumapp.viewmodel.MediaViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 
 
 @AndroidEntryPoint
@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity() {
                 currentTrack = track
                 if (isButtonPlayFirstClick || currentTrackId != track.id) {
                     mediaObserver.reset()
-                    mediaObserver.apply {
-                        player?.setDataSource("$BASE_URL${track.file}")
-                    }
+                        mediaObserver.apply {
+                            player?.setDataSource("$BASE_URL${track.file}")
+                        }
                     mediaObserver.play()
 
                     isButtonPlayFirstClick = false
