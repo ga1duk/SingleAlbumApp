@@ -31,18 +31,14 @@ class MediaLifecycleObserver : LifecycleEventObserver {
         player?.stop()
     }
 
-    fun release() {
-        player?.release()
-    }
-
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
             Lifecycle.Event.ON_PAUSE -> player?.pause()
-            Lifecycle.Event.ON_STOP -> {
+            Lifecycle.Event.ON_DESTROY -> {
                 player?.release()
                 player = null
+                source.lifecycle.removeObserver(this)
             }
-            Lifecycle.Event.ON_DESTROY -> source.lifecycle.removeObserver(this)
             else -> Unit
         }
     }

@@ -1,6 +1,7 @@
 package com.company.singlealbumapp.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.viewModels
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MediaViewModel by viewModels()
 
+    var currentTrack: Track? = null
+
     private lateinit var binding: ActivityMainBinding
     private val mediaObserver = MediaLifecycleObserver()
 
@@ -31,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var isButtonPlayFirstClick = true
-        var currentTrack = 0
+        var currentTrackId = 0
 
         val tracks = mutableListOf<Track>()
 
@@ -39,7 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = TrackAdapter(object : OnInteractionListener {
             override fun onPlayClick(track: Track) {
-                if (isButtonPlayFirstClick || currentTrack != track.id) {
+                currentTrack = track
+                if (isButtonPlayFirstClick || currentTrackId != track.id) {
                     mediaObserver.reset()
                     mediaObserver.apply {
                         player?.setDataSource("$BASE_URL${track.file}")
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     mediaObserver.resume()
                 }
 
-                currentTrack = track.id
+                currentTrackId = track.id
 
                 viewModel.playTrack(track)
 
@@ -159,5 +163,10 @@ class MainActivity : AppCompatActivity() {
         val positionInMins = (currentPosition?.rem(3600))?.div(60)
         val positionInSecs = currentPosition?.rem(60)
         binding.tvTrackProgress.text = String.format("%02d:%02d", positionInMins, positionInSecs)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        currentTrack?.let { viewModel.pauseTrack(it) }
     }
 }

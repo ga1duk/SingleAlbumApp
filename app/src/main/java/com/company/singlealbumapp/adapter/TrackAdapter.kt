@@ -27,7 +27,6 @@ class TrackAdapter(private val listener: OnInteractionListener) :
     }
 }
 
-
 class TrackViewHolder(
     private val binding: CardTrackBinding,
     private val listener: OnInteractionListener
