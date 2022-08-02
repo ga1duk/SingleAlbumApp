@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
                 tvAlbumGenre.text = album.genre
             }
             for (track in album.tracks) {
-                tracks.add(Track(track.id, track.file, track.isPlaying))
+                tracks.add(Track(track.id, track.file, track.isPlaying, album.title))
             }
             adapter.submitList(tracks)
         }
