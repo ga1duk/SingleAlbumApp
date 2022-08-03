@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                     mediaObserver.player?.duration
                 }
 
+//                Форматируем длину трека в секундах в формат мм:сс и присваиваем это значение для tvTrackDuration
                 convertAndSetTrackDuration(binding)
 
                 lifecycleScope.launch {
@@ -73,10 +74,12 @@ class MainActivity : AppCompatActivity() {
                         while (mediaObserver.player != null && currentPosition < (total ?: 0)) {
                             delay(1000)
 
+//                            Форматируем текущую позицию проигрывания трека в формат мм:сс и присваиваем это значение для tvTrackProgress
                             convertAndSetTrackCurrentPosition(binding)
 
                             currentPosition = mediaObserver.player?.currentPosition ?: 0
 
+//                            изменяем положение бегунка в seekBar'e, в соответствии с позицией проигрывания трека
                             binding.seekBar.progress = currentPosition
                         }
                     } catch (e: InterruptedException) {
@@ -105,6 +108,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+//        Вешаем listener на SeekBar для перемещения бегунка в то место, до которого его подвинул пользователь (перематываем композицию вперёд/назад)
         binding.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
