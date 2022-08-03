@@ -7,11 +7,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.company.singlealbumapp.BuildConfig.BASE_URL
+import com.company.singlealbumapp.R
 import com.company.singlealbumapp.adapter.OnInteractionListener
 import com.company.singlealbumapp.adapter.TrackAdapter
 import com.company.singlealbumapp.databinding.ActivityMainBinding
 import com.company.singlealbumapp.dto.Track
 import com.company.singlealbumapp.viewmodel.MediaViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -151,6 +153,14 @@ class MainActivity : AppCompatActivity() {
             }
             adapter.submitList(tracks)
             adapter.notifyDataSetChanged()
+        }
+
+        viewModel.dataState.observe(this) { state ->
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Retry") { viewModel.loadAlbum() }
+                    .show()
+            }
         }
     }
 

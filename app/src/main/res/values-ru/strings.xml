@@ -2,4 +2,5 @@
     <string name="app_name">SingleAlbumApp</string>
     <string name="album_title_text">АЛЬБОМ</string>
     <string name="author_title_text">Исполнитель:</string>
+    <string name="error_loading">Что-то пошло не так. Попробуйте позже</string>
 </resources>

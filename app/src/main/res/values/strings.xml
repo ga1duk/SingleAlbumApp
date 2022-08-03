@@ -4,4 +4,5 @@
     <string name="author_title_text">Author:</string>
     <string name="track_progress_default_text" translatable="false">00:00</string>
     <string name="track_duration_default_text" translatable="false">00:00</string>
+    <string name="error_loading">Something went wrong. Try again later</string>
 </resources>
