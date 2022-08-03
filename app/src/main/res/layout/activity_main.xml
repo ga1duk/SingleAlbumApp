@@ -7,27 +7,27 @@
     tools:context=".ui.MainActivity">
 
     <TextView
-        android:id="@+id/tv_album_title"
+        android:id="@+id/tv_album"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_spacing"
         android:layout_marginTop="@dimen/big_spacing"
         android:paddingBottom="@dimen/extra_small_spacing"
         android:text="@string/album_title_text"
-        android:textSize="16sp"
+        android:textSize="@dimen/album_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_album_name"
+        android:id="@+id/tv_album_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_spacing"
         android:paddingBottom="@dimen/extra_small_spacing"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="@dimen/album_title_text_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_album_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_album"
         tools:text="One More Light Live" />
 
     <TextView
@@ -37,9 +37,9 @@
         android:layout_marginStart="@dimen/common_spacing"
         android:paddingBottom="@dimen/extra_small_spacing"
         android:text="@string/author_title_text"
-        android:textSize="20sp"
+        android:textSize="@dimen/standard_text_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_album_name" />
+        app:layout_constraintTop_toBottomOf="@id/tv_album_title" />
 
     <TextView
         android:id="@+id/tv_author_name"
@@ -48,9 +48,9 @@
         android:layout_marginStart="@dimen/extra_small_spacing"
         android:paddingBottom="@dimen/extra_small_spacing"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/standard_text_size"
         app:layout_constraintStart_toEndOf="@id/tv_author_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_album_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_album_title"
         tools:text="Linkin Park" />
 
     <TextView
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_spacing"
         android:layout_marginBottom="@dimen/big_spacing"
-        android:textSize="20sp"
+        android:textSize="@dimen/standard_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_author_title"
         tools:text="2017" />
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/big_spacing"
         android:layout_marginBottom="@dimen/big_spacing"
-        android:textSize="20sp"
+        android:textSize="@dimen/standard_text_size"
         app:layout_constraintStart_toEndOf="@id/tv_album_year"
         app:layout_constraintTop_toBottomOf="@id/tv_author_title"
         tools:text="One More Light Live" />
@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/small_spacing"
-        android:text="00:00"
+        android:text="@string/track_progress_default_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -110,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/small_spacing"
-        android:text="00:00"
+        android:text="@string/track_duration_default_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

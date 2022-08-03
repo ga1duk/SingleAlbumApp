@@ -2,4 +2,6 @@
     <string name="app_name">SingleAlbumApp</string>
     <string name="album_title_text">ALBUM</string>
     <string name="author_title_text">Author:</string>
+    <string name="track_progress_default_text" translatable="false">00:00</string>
+    <string name="track_duration_default_text" translatable="false">00:00</string>
 </resources>

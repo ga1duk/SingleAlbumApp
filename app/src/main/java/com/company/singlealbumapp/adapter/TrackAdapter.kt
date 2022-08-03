@@ -34,7 +34,7 @@ class TrackViewHolder(
     RecyclerView.ViewHolder(binding.root) {
     fun bind(track: Track) {
         with(binding) {
-            tvTrackName.text = track.file
+            tvTrackTitle.text = track.file
 
             tvAlbumTitle.text = track.albumTitle
 

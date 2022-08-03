@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.albumData.observe(this)
         { album ->
             with(binding) {
-                tvAlbumName.text = album.title
+                tvAlbumTitle.text = album.title
                 tvAuthorName.text = album.artist
                 tvAlbumYear.text = album.published
                 tvAlbumGenre.text = album.genre
