@@ -5,7 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatButton
+import android.view.View
+import androidx.core.content.ContextCompat
 import com.company.singlealbumapp.R
 import kotlin.math.min
 
@@ -18,7 +19,7 @@ class PauseButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatButton(
+) : View(
     context, attrs, defStyleAttr
 ) {
 
@@ -27,13 +28,13 @@ class PauseButton @JvmOverloads constructor(
 
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = resources.getColor(R.color.yellow)
+        color = ContextCompat.getColor(context, R.color.yellow)
     }
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         strokeWidth = CUSTOM_STROKE_WIDTH
-        color = resources.getColor(R.color.black)
+        color = ContextCompat.getColor(context, R.color.black)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

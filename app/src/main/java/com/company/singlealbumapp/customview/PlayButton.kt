@@ -7,7 +7,7 @@ import android.graphics.Path
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import com.company.singlealbumapp.R
 import kotlin.math.min
 
@@ -21,7 +21,7 @@ class PlayButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatButton(
+) : View(
     context, attrs, defStyleAttr
 ) {
 
@@ -30,12 +30,12 @@ class PlayButton @JvmOverloads constructor(
 
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = resources.getColor(R.color.yellow)
+        color = ContextCompat.getColor(context, R.color.yellow)
     }
 
     private val trianglePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = CUSTOM_STROKE_WIDTH
-        color = resources.getColor(R.color.black)
+        color = ContextCompat.getColor(context, R.color.black)
         style = Paint.Style.FILL_AND_STROKE
     }
 
